@@ -6,7 +6,7 @@ function! file_protocol#edit() abort
   if has_key(info, 'column')
     execute printf('keepjumps normal! %dG%d|zv', info.line, info.column)
   elseif has_key(info, 'line')
-    execute printf('keepjumps normal! %dG|zv', info.line)
+    execute printf('keepjumps normal! %dGzv', info.line)
   endif
 endfunction
 
