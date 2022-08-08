@@ -2,11 +2,11 @@ function! file_protocol#edit() abort
   let expr = expand('<amatch>')
   let info = s:parse(expr)
   let opts = printf('++ff=%s ++enc=%s ++%s', &fileformat, &fileencoding, &binary ? 'bin' : 'nobin')
-  execute printf('edit %s %s %s', opts, v:cmdarg, info.path)
+  execute printf('keepalt keepjumps edit %s %s %s', opts, v:cmdarg, info.path)
   if has_key(info, 'column')
-    execute printf('normal! %dG%d|zv', info.line, info.column)
+    execute printf('keepjumps normal! %dG%d|zv', info.line, info.column)
   elseif has_key(info, 'line')
-    execute printf('normal! %dG|zv', info.line)
+    execute printf('keepjumps normal! %dG|zv', info.line)
   endif
 endfunction
 
