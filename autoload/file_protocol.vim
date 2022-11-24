@@ -47,15 +47,18 @@ function! s:decodeURI(uri) abort
         \ { m -> nr2char(str2nr(m[1], 16)) }, 'g')
 endfunction
 
-if !has('win32') || (exists('+shellslash') && &shellslash)
+if !has('win32')
   " /home/john/README.md -> /home/john/README.md
   function! s:normpath(path) abort
     return a:path
   endfunction
 else
-  " /C/Users/John/README.md -> C:\Users\John\README.md
+  " /C/Users/John/README.md  -> C:\Users\John\README.md
+  " /C|/Users/John/README.md -> C:\Users\John\README.md
+  " /C:/Users/John/README.md -> C:\Users\John\README.md
+  " /C:\Users\John\README.md -> C:\Users\John\README.md
   function! s:normpath(path) abort
-    let path = substitute(a:path, '^/\([a-zA-Z]\)/', '\1:/')
-    return fnamemodify(path, 'gs?/?\\?')
+    let path = substitute(a:path, '^/\([a-zA-Z]\)[:|]\?[/\\]', '\1:/', '')
+    return fnamemodify(path, ':gs?/?\\?')
   endfunction
 endif
